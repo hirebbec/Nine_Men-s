@@ -1,13 +1,14 @@
 
-NAME	= bin/game
+NAME	=	bin/game
 
-CC		= g++
-CFLAGS	= -Wall -Wextra -Werror
-LFLAGS	= -lsfml-graphics -lsfml-window -lsfml-system -lGL
-RM		= rm -f
+CC		=	g++
+CFLAGS	=	-Wall -Wextra -Werror
+LFLAGS	=	-lsfml-graphics -lsfml-window -lsfml-system -lGL
+RM		=	rm -f
 
-FILES	= src/main.cpp
-OBJS	= $(FILES:%.cpp=%.o)
+FILES	=	src/main.cpp			src/models/Game.cpp		src/models/Board.cpp \
+			src/models/Piece.cpp		
+OBJS	=	$(FILES:%.cpp=%.o)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
