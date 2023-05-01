@@ -1,4 +1,4 @@
-#include "./../includes/models/Game.hpp"
+#include "./../includes/controllers/Game.hpp"
 
 int main()
 {

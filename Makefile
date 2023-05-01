@@ -6,8 +6,8 @@ CFLAGS	=	-Wall -Wextra -Werror
 LFLAGS	=	-lsfml-graphics -lsfml-window -lsfml-system -lGL
 RM		=	rm -f
 
-FILES	=	src/main.cpp			src/models/Game.cpp		src/models/Board.cpp \
-			src/models/Piece.cpp		
+FILES	=	src/main.cpp			src/controllers/Game.cpp		src/models/Board.cpp \
+			src/models/Piece.cpp	src/controllers/Player.cpp
 OBJS	=	$(FILES:%.cpp=%.o)
 
 %.o: %.cpp
