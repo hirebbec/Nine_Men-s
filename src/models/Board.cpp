@@ -1,4 +1,5 @@
 #include "./../../includes/models/Board.hpp"
+#include <random>
 
 Board::Board(sf::RenderWindow& window, std::vector<Piece>& pieces): m_window(window), playerPieces(pieces) {
     for (int i = 0; i < 3; ++i) {
@@ -79,28 +80,42 @@ std::vector<std::pair<int, int> > Board::getLegalMoves(Piece& piece) {
     std::vector<std::pair<int, int> > moves;
     int x = piece.getPosX();
     int y = piece.getPosY();
-    if (x < 8) {
-        if (map[y][x + 1] == EMPTY) {
-            moves.push_back(std::make_pair(y, x + 1));
-        }
+    if (x < 7 && map[y][x + 1] == EMPTY) {
+        moves.push_back(std::make_pair(y, x + 1));
     }
-    if (x > 0) {
-        if (map[y][x - 1] == EMPTY) {
-            moves.push_back(std::make_pair(y, x - 1));
-        }
+    if (x > 0 && map[y][x - 1] == EMPTY) {
+        moves.push_back(std::make_pair(y, x - 1));
     }
-    if (y < 8) {
-        if (map[y + 1][x] == EMPTY) {
-            moves.push_back(std::make_pair(y + 1, x));
-        }
+    if (y < 7 && map[y + 1][x] == EMPTY) {
+        moves.push_back(std::make_pair(y + 1, x));
     }
-    if (y > 0) {
-        if (map[y - 1][x] == EMPTY) {
-            moves.push_back(std::make_pair(y - 1, x));
-        }
+    if (y > 0 && map[y - 1][x] == EMPTY) {
+        moves.push_back(std::make_pair(y - 1, x));
     }
     return moves;
 }
+
+std::vector<std::pair<int, int> > Board::getSmartMoves(Piece& piece) {
+    std::vector<std::pair<int, int> > moves;
+    std::pair<int, int> target = getTarget();
+    int x = piece.getPosX();
+    int y = piece.getPosY();
+    if (x < target.second && map[y][x + 1] == EMPTY) {
+        moves.push_back(std::make_pair(y, x + 1));
+    }
+    if (y < target.first && map[y + 1][x] == EMPTY) {
+        moves.push_back(std::make_pair(y + 1, x));
+    }
+    if (x > target.second && map[y][x - 1] == EMPTY) {
+        moves.push_back(std::make_pair(y, x - 1));
+    }
+    if (y > target.first && map[y - 1][x] == EMPTY) {
+        moves.push_back(std::make_pair(y - 1, x));
+    }
+    return moves;
+}
+
+
 
 bool Board::tryMove(std::pair<int, int> pos) {
     for (auto it = playerPieces.begin(); it != playerPieces.end(); ++it) {
@@ -117,4 +132,58 @@ bool Board::tryMove(std::pair<int, int> pos) {
         }
     }
     return false;
+}
+
+bool Board::moveAI() {
+    int r = std::rand() % aiPieces.size();
+    for (int i = r + 1; i != r; ++i) {
+        if (i > 8)
+            i = 0;
+        if (checkInPlace(aiPieces[i]))
+            continue;
+        auto moves = getSmartMoves(aiPieces[i]);
+        if (!moves.empty()) {
+            int x = aiPieces[i].getPosX();
+            int y = aiPieces[i].getPosY();
+            aiPieces[i].move(moves[std::rand() % moves.size()]);
+            std::swap(map[y][x], map[aiPieces[i].getPosY()][aiPieces[i].getPosX()]);
+            return true;
+        }
+    }
+    for (int i = r + 1; i != r; ++i) {
+        if (i > 8)
+            i = 0;
+        auto moves = getLegalMoves(aiPieces[i]);
+        if (!moves.empty()) {
+            int x = aiPieces[i].getPosX();
+            int y = aiPieces[i].getPosY();
+            aiPieces[i].move(moves[std::rand() % moves.size()]);
+            std::swap(map[y][x], map[aiPieces[i].getPosY()][aiPieces[i].getPosX()]);
+            return true;
+        }
+    }
+    return false;
+}
+
+std::pair<int, int> Board::getTarget() {
+    for (int i = 7; i > 4; --i) {
+        for (int j = 7; j > 4; --j) {
+            if (map[i][j] == EMPTY) {
+                return std::make_pair(i, j);
+            }
+        }
+    }
+    return std::make_pair(5, 5);
+}
+
+bool Board::checkInPlace(Piece& piece) {
+    for (int i = 7; i > 4; --i) {
+        for (int j = 7; j > 4; --j) {
+            if (map[i][j] != AI_PIECE) {
+                return false;
+            } else if (i == piece.getPosY() && j == piece.getPosX())
+                return true;
+        }
+    }
+    return true;
 }

@@ -12,6 +12,7 @@ private:
     sf::RenderWindow	m_window;
 	Player				m_player;
     Board				m_board;
+	bool				m_turn;
 public:
 	Game();
 
@@ -21,6 +22,9 @@ private:
 	void checkMouseChose();
 	bool checkChosePlayerPiece();
 	bool checkChoseEmpty();
+	bool checkWin();
+	bool checkPlayerWin();
+	bool checkAIWin();
 };
 
 #endif

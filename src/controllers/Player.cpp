@@ -11,6 +11,3 @@ Player::Player() {
 std::vector<Piece>& Player::getPieces() {
     return m_pieces;
 }
-
-void Player::makeMove() {
-}

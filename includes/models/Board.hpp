@@ -30,9 +30,13 @@ public:
     std::vector<Piece>& getPlayerPieces();
 	Piece*	getPiece(int y, int x);
 	std::vector<std::pair<int, int> > getLegalMoves(Piece& piece);
+    std::vector<std::pair<int, int> > getSmartMoves(Piece& piece);
 	bool tryMove(std::pair<int, int> pos);
+    bool moveAI();
 private:
 	void	drawMoves(Piece& (piece));
+    std::pair<int, int> getTarget();
+    bool checkInPlace(Piece& piece);
 };
 
 #endif
