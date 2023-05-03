@@ -1,8 +1,8 @@
 #ifndef PIECE_HPP
 #define PIECE_HPP
 
-#include <SFML/Graphics.hpp>
-#include <SFML/OpenGL.hpp>
+#include "./../../SFML/Graphics.hpp"
+#include "./../../SFML/OpenGL.hpp"
 #include "Board.hpp"
 #include <iostream>
 
